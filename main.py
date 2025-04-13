@@ -61,7 +61,7 @@ def patch_hotel(hotel_id: int,
                 ):
     global hotels
     hotel = [hotel for hotel in hotels if hotel["id"] == hotel_id][0]
-    if title: 
+    if title:
         hotel["title"] = title
     if name:
         hotel["name"] = name
