@@ -56,12 +56,12 @@ def put_hotel(
 
 @app.patch("/hotels/{hotel_id}")
 def patch_hotel(hotel_id: int,
-                title: str | None = Query(default=None),
-                name: str | None = Query(default=None),
+                title: str | None = Body(default=None),
+                name: str | None = Body(default=None),
                 ):
     global hotels
     hotel = [hotel for hotel in hotels if hotel["id"] == hotel_id][0]
-    if title:
+    if title: 
         hotel["title"] = title
     if name:
         hotel["name"] = name
