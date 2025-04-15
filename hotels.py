@@ -27,7 +27,7 @@ def get_hotels(
 
 
 
-@router.post("")
+@router.post("/hotels")
 def create_hotel(hotel_data: Hotel = Body(openapi_examples={'1':
     {'summary': "Сочи","value":{"title":"Отель 5 звезд у моря","name":"sochi_u_morya",}}})):
     global hotels
