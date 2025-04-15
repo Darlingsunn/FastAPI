@@ -1,8 +1,8 @@
-from fastapi import Query,Body,APIRouter
+from fastapi import Query, Body, APIRouter
 
-router=APIRouter(prefix="/hotels", tags=["Отели"])
+from schemas.Hotels import Hotel,HotelPatch
 
-
+router = APIRouter(prefix="/hotels", tags=["Отели"])
 
 
 hotels = [
@@ -23,17 +23,18 @@ def get_hotels(
         if title and hotel['title'] != title:
             continue
         hotels_.append(hotel)
-    return hotels_
-    # return [hotel for hotel in hotels if hotel["title"]==title and hotel["id"]==id]
+    return hotels
 
 
-# body, request body
-@router.post('/hotels')
-def create_hotel(title: str = Body(embed=True)):
+
+@router.post("")
+def create_hotel(hotel_data: Hotel = Body(openapi_examples={'1':
+    {'summary': "Сочи","value":{"title":"Отель 5 звезд у моря","name":"sochi_u_morya",}}})):
     global hotels
     hotels.append({
         'id': hotels[-1]['id'] + 1,
-        'title': title
+        'title': hotel_data.title,
+        'name': hotel_data.name
     })
 
 
@@ -47,24 +48,23 @@ def delete_hotel(hotel_id: int):
 @router.put("/hotels/{hotel_id}")
 def put_hotel(
         hotel_id: int,
-        title: str = Body(),
-        name: str = Body(),
+        hotel_data: Hotel,
 ):
     global hotels
     hotel = [hotel for hotel in hotels if hotel["id"] == hotel_id][0]
-    hotel["title"] = title
-    hotel["name"] = name
+    hotel["title"] = hotel_data.title
+    hotel["name"] = hotel_data.name
     return {"status": "OK"}
+
 
 @router.patch("/hotels/{hotel_id}")
 def patch_hotel(hotel_id: int,
-                title: str | None = Body(default=None),
-                name: str | None = Body(default=None),
+                hotel_data: HotelPatch
                 ):
     global hotels
     hotel = [hotel for hotel in hotels if hotel["id"] == hotel_id][0]
-    if title is not None:
-        hotel["title"] = title
-    if name is not None:
-        hotel["name"] = name
+    if hotel_data.title is not None:
+        hotel["title"] = hotel_data.title
+    if hotel_data.name is not None:
+        hotel["name"] = hotel_data.name
     return {"status": "OK"}
