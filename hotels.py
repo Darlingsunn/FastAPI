@@ -6,15 +6,22 @@ router = APIRouter(prefix="/hotels", tags=["Отели"])
 
 
 hotels = [
-    {"id": 1, "title": "Sochi", "name": "Отель в Сочи"},
-    {"id": 2, "title": "Дубай", "name": "Отель в Дубае"},
-]
+     {"id": 1, "title": "Sochi", "name": "sochi"},
+     {"id": 2, "title": "Дубай", "name": "dubai"},
+     {"id": 3, "title": "Мальдивы", "name": "maldivi"},
+     {"id": 4, "title": "Геленджик", "name": "gelendzhik"},
+     {"id": 5, "title": "Москва", "name": "moscow"},
+     {"id": 6, "title": "Казань", "name": "kazan"},
+     {"id": 7, "title": "Санкт-Петербург", "name": "spb"},
+    ]
 
 
 @router.get("/hotels")
 def get_hotels(
         id: int | None = Query(None, description='Айди отеля'),
         title: str | None = Query(None, description='Название отеля'),
+        page : int  = Query(default=1,description="Страница"),
+        per_page: int  = Query(default=3 , description="Количество Отелей на странице"),
 ):
     hotels_ = []
     for hotel in hotels:
@@ -23,13 +30,22 @@ def get_hotels(
         if title and hotel['title'] != title:
             continue
         hotels_.append(hotel)
-    return hotels
+    start=(page-1)*per_page
+    end=start+per_page
+
+    return hotels_[start:end]
 
 
 
 @router.post("/hotels")
-def create_hotel(hotel_data: Hotel = Body(openapi_examples={'1':
-    {'summary': "Сочи","value":{"title":"Отель 5 звезд у моря","name":"sochi_u_morya",}}})):
+def create_hotel(hotel_data: Hotel = Body(openapi_examples=
+    {'1': {'summary': "Сочи","value":{
+        "title":"Отель 5 звезд у моря","name":"sochi_u_morya",
+    }}, '2': {'summary': "Dubai","value":{
+        "title":"Отель 5 звезд у fountain","name":"Dubai_fountain",
+    }},
+     })
+                 ):
     global hotels
     hotels.append({
         'id': hotels[-1]['id'] + 1,
