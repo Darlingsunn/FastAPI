@@ -1,6 +1,6 @@
 from fastapi import Query,Body,APIRouter
 
-router=APIRouter(prefix="/hotels")
+router=APIRouter(prefix="/hotels", tags=["Отели"])
 
 
 
@@ -11,7 +11,7 @@ hotels = [
 ]
 
 
-@app.get("/hotels")
+@router.get("/hotels")
 def get_hotels(
         id: int | None = Query(None, description='Айди отеля'),
         title: str | None = Query(None, description='Название отеля'),
@@ -28,7 +28,7 @@ def get_hotels(
 
 
 # body, request body
-@app.post('/hotels')
+@router.post('/hotels')
 def create_hotel(title: str = Body(embed=True)):
     global hotels
     hotels.append({
@@ -37,14 +37,14 @@ def create_hotel(title: str = Body(embed=True)):
     })
 
 
-@app.delete('/hotels/{hotel_id}')
+@router.delete('/hotels/{hotel_id}')
 def delete_hotel(hotel_id: int):
     global hotels
     hotels = [hotel for hotel in hotels if hotel['id'] != hotel_id]
     return {'status': 'OK'}
 
 
-@app.put("/hotels/{hotel_id}")
+@router.put("/hotels/{hotel_id}")
 def put_hotel(
         hotel_id: int,
         title: str = Body(),
@@ -56,7 +56,7 @@ def put_hotel(
     hotel["name"] = name
     return {"status": "OK"}
 
-@app.patch("/hotels/{hotel_id}")
+@router.patch("/hotels/{hotel_id}")
 def patch_hotel(hotel_id: int,
                 title: str | None = Body(default=None),
                 name: str | None = Body(default=None),
