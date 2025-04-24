@@ -20,8 +20,8 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table('hotels',
                     sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('title', sa.String(length=100), nullable=False),
-                    sa.Column('location', sa.String(), nullable=False),
+                    sa.Column('title', sa.String(length=100), nullable=True),
+                    sa.Column('location', sa.String(length=100), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
 
