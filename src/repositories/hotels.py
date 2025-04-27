@@ -1,10 +1,12 @@
-from sqlalchemy import select, func, insert
-from repositories.base import BaseRepository
+from sqlalchemy import select
+from src.repositories.base import BaseRepository
 from src.models.hotels import HotelsOrm
+from src.schemas.Hotels import Hotel
 
 
 class HotelsRepository(BaseRepository):
     model = HotelsOrm
+    schema = Hotel
 
     async def get_all(
             self,
@@ -12,7 +14,7 @@ class HotelsRepository(BaseRepository):
             title,
             limit,
             offset
-    ):
+    ) -> list[Hotel]:
         query = select(HotelsOrm)
         if location:
             query = query.filter(HotelsOrm.location.like(f"%{location.strip().title()}%"))
@@ -25,16 +27,5 @@ class HotelsRepository(BaseRepository):
         )
 
         result = await self.session.execute(query)
-        return result.scalars().all()
+        return [Hotel.model_validate(hotel, from_attributes=True) for hotel in result.scalars().all()]
 
-    async def get_one_or_none(self, id, location, title):
-        query = select(HotelsOrm)
-        if id:
-            query = query.filter(id==HotelsOrm.id)
-        if location:
-            query = query.filter(location.title()==HotelsOrm.location)
-        if title:
-            query = query.filter(title.title()==HotelsOrm.title)
-        result = await self.session.execute(query)
-
-        return result.scalars().all()
