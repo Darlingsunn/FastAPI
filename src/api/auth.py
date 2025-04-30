@@ -1,4 +1,3 @@
-from fastapi import APIRouter, HTTPException,Response,Request
 from src.config import settings
 from src.repositories.users import UsersRepository
 from src.schemas.users import UserRequestAdd, UserAdd
@@ -53,16 +52,19 @@ async def login_user(
         response.set_cookie("access_token", access_token)
         return {"access_token": access_token}
 
-@router.patch("/logout")
+
+@router.get("/logout")
 async def logout_user(
-        data: UserRequestAdd,
+
         response: Response
 ):
-    response.delete_cookie("access_token", "/login")
+    response.delete_cookie("access_token")
     return {"status": "Done"}
+
+
 @router.get("/me")
 async def get_me(
-         user_id: UserIdDep,
+        user_id: UserIdDep,
 ):
     async with async_session_maker() as session:
         user = await UsersRepository(session).get_one_or_none(id=user_id)
