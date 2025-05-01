@@ -1,5 +1,5 @@
 from fastapi import Query, Body, APIRouter
-from src.schemas.Hotels import HotelPatch, HotelAdd
+from src.schemas.hotels import HotelPatch, HotelAdd
 from src.api.dependences import PaginationDEP
 from src.database import async_session_maker
 from src.repositories.hotels import HotelsRepository
