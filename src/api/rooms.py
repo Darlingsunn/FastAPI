@@ -6,13 +6,24 @@ from src.repositories.rooms import RoomsRepository
 router = APIRouter(prefix="/hotels", tags=["Номера"])
 
 
-# @router.get("/{hotel_id}")
-# async def get_rooms(title: str
-#
-# ):
-#     async with (async_session_maker() as session):
-#         return await RoomsRepository(session).get_all(*args,**kwargs)
-#
+@router.get("/{hotel_id}")
+async def get_rooms(
+        hotel_id: int ,
+        title: str|None = Query(None,description="Название номера"),
+        description: str|None = Body(None,description="Описание"),
+        price: str|None = Body(None,description="Цена"),
+        quantity: str|None = Body(None,description="Количество номеров")
+
+):
+    async with async_session_maker() as session:
+        return await RoomsRepository(session).get_all(
+            hotel_id=hotel_id,
+            title=title,
+            description=description,
+            price=price,
+            quantity=quantity
+        )
+
 
 @router.post("/{hotel_id}")
 async def create_room(
@@ -20,7 +31,7 @@ async def create_room(
             "1": {
                 "summary": "VIP",
                 "value": {
-                    "hotel_id":2,
+                    "hotel_id": 2,
                     "title": "VIP комнаты на 2-х",
                     "description": "Номера ЛЮКС-класса с видом на море",
                     "price": 15000,
@@ -30,13 +41,13 @@ async def create_room(
             "2": {
                 "summary": "MEDIUM",
                 "value": {
-                    "hotel_id":3,
+                    "hotel_id": 3,
                     "title": "Уютные комнаты на 4-х",
                     "description": "Номера -класса с видом на море",
                     "price": 7000,
                     "quantity": 4
                 }
-            } 
+            }
         })
 ):
     async with async_session_maker() as session:
