@@ -7,7 +7,7 @@ from src.services.auth import AuthService
 import jwt
 from fastapi import APIRouter, HTTPException, Response
 
-from src.api.dependences import UserIdDep, GetToken
+from src.api.dependences import UserIdDep
 
 router = APIRouter(prefix="/auth", tags=["Авторизация и Аутентификация"])
 
