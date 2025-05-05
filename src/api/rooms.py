@@ -25,7 +25,6 @@ async def get_hotel(
 @router.post("/{hotel_id}/rooms")
 async def create_room(
         hotel_id: int,
-        price:int,
         room_data: RoomAddRequest = Body()
 ):
     _room_data = RoomAdd(hotel_id=hotel_id, **room_data.model_dump())

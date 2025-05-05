@@ -1,5 +1,4 @@
 from src.repositories.base import BaseRepository
-from src.models.rooms import RoomsOrm
 from src.schemas.bookings import Booking
 from sqlalchemy import select
 from src.models.bookings import BookingsOrm
@@ -15,7 +14,7 @@ class BookingsRepository(BaseRepository):
             room_id,
             date_from,
             date_to,
-            price=
+            price
     ) -> list[Booking]:
         query = select(BookingsOrm)
 
