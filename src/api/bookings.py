@@ -6,6 +6,21 @@ from src.models.bookings import BookingsOrm
 router = APIRouter(prefix="/bookings", tags=["Бронирования"])
 
 
+@router.get("")
+async def get_all_bookings(
+        db: DBDep
+):
+    return await db.bookings.get_all()
+
+
+@router.get("/me")
+async def current_user_booking(
+        db: DBDep,
+        user_id: UserIdDep
+):
+    return await db.bookings.get_filtered(user_id=user_id)
+
+
 @router.post("/{user_id}/bookings")
 async def create_booking(
         user_id: UserIdDep,
@@ -15,7 +30,7 @@ async def create_booking(
 ):
     room = await db.rooms.get_one_or_none(id=booking_data.room_id)
     room_price: int = room.price
-    total_booking_price=BookingsOrm(price=room_price,**booking_data.model_dump()).total_cost
+    total_booking_price = BookingsOrm(price=room_price, **booking_data.model_dump()).total_cost
     _booking_data = BookingAdd(user_id=user_id, price=total_booking_price, **booking_data.model_dump())
     booking = await db.bookings.add(_booking_data)
     await db.commit()
