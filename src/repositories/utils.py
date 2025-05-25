@@ -3,7 +3,7 @@ from datetime import date
 from sqlalchemy import select, func
 from src.models.bookings import BookingsOrm
 from src.models.rooms import RoomsOrm
-from src.models.hotels import HotelsOrm
+
 
 
 def rooms_ids_for_booking(
@@ -49,7 +49,7 @@ def rooms_ids_for_booking(
         .select_from(rooms_left_table)
         .filter(
             rooms_left_table.c.rooms_left > 0,
-            rooms_left_table.c.room_id.in_(rooms_ids_for_hotel), # type: ignore
+            rooms_left_table.c.room_id.in_(rooms_ids_for_hotel) # type: ignore
         )
     )
 
