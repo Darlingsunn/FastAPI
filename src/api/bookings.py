@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from src.api.dependences import DBDep, UserIdDep
 from src.schemas.bookings import BookingAdd, BookingAddRequest
 
-
 router = APIRouter(prefix="/bookings", tags=["Бронирования"])
 
 
@@ -48,7 +47,7 @@ async def add_booking(
     _booking_data = BookingAdd(
         user_id=user_id,
         price=room_price,
-       **booking_data.dict(),
+        **booking_data.dict(),
     )
     booking = await db.bookings.add(_booking_data)
     await db.commit()

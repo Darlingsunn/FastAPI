@@ -33,6 +33,11 @@ class BaseRepository:
         result = await self.session.execute(add_data_stat)
         return result.scalars().one()
 
+    async def add_bulk(self, data: list[BaseModel]):
+        add_data_stat = insert(self.model).values([item.model_dump() for item in data])
+        await self.session.execute(add_data_stat)
+
+
     async def edit(self, data: BaseModel, exclude_unset: bool = False, **filter_by):
         update_data = (
             update(self.model)
